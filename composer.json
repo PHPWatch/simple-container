@@ -1,0 +1,33 @@
+{
+    "name": "phpwatch/simple-container",
+    "description": "Bare-minimum PSR-11 compatible Dependency Injection container based on closures and with Array-syntax",
+    "type": "library",
+    "keywords": ["psr11", "container", "dependency injection"],
+    "require": {
+        "psr/container": "^1.0",
+        "php": "^7.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ayesh Karunaratne",
+            "email": "ayesh@ayesh.me"
+        }
+    ],
+    "provide": {
+        "psr/container-implementation": "1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PHPWatch\\SimpleContainer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPWatch\\SimpleContainer\\Tests": "tests/"
+        }
+    }
+}
