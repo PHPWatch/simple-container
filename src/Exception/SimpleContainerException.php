@@ -2,4 +2,6 @@
 
 namespace PHPWatch\SimpleContainer\Exception;
 
-interface SimpleContainerException {}
+use Psr\Container\ContainerExceptionInterface;
+
+interface SimpleContainerException extends ContainerExceptionInterface {}
