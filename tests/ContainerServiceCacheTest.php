@@ -56,7 +56,9 @@ class ContainerServiceCacheTest extends TestCase {
                 'dsn' => 'sqlite...'
             ],
             'prefix' => 'Foo',
-            'csprng' => fn(ContainerInterface $container) => $container->get('prefix') . bin2hex(random_bytes(16)),
+            'csprng' => static function (ContainerInterface $container) {
+                return $container->get('prefix') . bin2hex(random_bytes(16));
+            }
         ];
 
         $container = new Container($services);
