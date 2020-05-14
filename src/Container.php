@@ -2,11 +2,15 @@
 
 namespace PHPWatch\SimpleContainer;
 
+use ArrayAccess;
 use PHPWatch\SimpleContainer\Exception\BadMethodCallException;
 use PHPWatch\SimpleContainer\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
+use function array_key_exists;
+use function is_callable;
+use function sprintf;
 
-class Container implements \ArrayAccess, ContainerInterface {
+class Container implements ArrayAccess, ContainerInterface {
     private array $definitions;
     private array $generated = [];
     private array $protected = [];
