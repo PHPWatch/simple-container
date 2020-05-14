@@ -41,8 +41,10 @@ class Container implements ArrayAccess, ContainerInterface {
     }
 
     public function set(string $id, $value): void {
+        if (array_key_exists($id, $this->definitions)) {
+            unset($this->generated[$id], $this->factories[$id], $this->protected[$id]);
+        }
         $this->definitions[$id] = $value;
-        unset($this->generated[$id], $this->factories[$id], $this->protected[$id]);
     }
 
     public function setProtected(string $id, ?callable $value = null): void {
