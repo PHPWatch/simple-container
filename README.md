@@ -2,6 +2,10 @@
 # Simple Container  
 A PSR-11 compatible Container that works similar to `pimple/pimple` but lives up to "simple" name.  
   
+ 
+[![Latest Stable Version](https://poser.pugx.org/phpwatch/simple-container/v/stable)](https://packagist.org/packages/phpwatch/simple-container) ![CI](https://github.com/PHPWatch/simple-container/workflows/CI/badge.svg?branch=master) [![codecov](https://codecov.io/gh/PHPWatch/simple-container/branch/master/graph/badge.svg)](https://codecov.io/gh/PHPWatch/simple-container) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/PHPWatch/simple-container/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/PHPWatch/simple-container/?branch=master) [![License](https://poser.pugx.org/phpwatch/simple-container/license)](https://packagist.org/packages/phpwatch/simple-container)
+
+
 ## Design goals  
   
  - Do one thing and do it well  
