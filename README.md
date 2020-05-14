@@ -1,6 +1,8 @@
 # Simple Container
 A PSR-11 compatible Container that works similar to `pimple/pimple` but lives up to "simple" name.
 
+![CI](https://github.com/PHPWatch/simple-container/workflows/CI/badge.svg?branch=master)
+
 ## Design goals
 
  - Do one thing and do it well
