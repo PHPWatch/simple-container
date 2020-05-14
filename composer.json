@@ -27,7 +27,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "PHPWatch\\SimpleContainer\\Tests": "tests/"
+            "PHPWatch\\SimpleContainer\\Tests\\": "tests/"
         }
     }
 }
