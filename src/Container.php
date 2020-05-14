@@ -25,26 +25,24 @@ class Container implements ArrayAccess, ContainerInterface {
             throw new NotFoundException(sprintf('Container key "%s" is not defined', $id));
         }
 
-        if (!is_callable($this->definitions[$id]) || isset($this->protected[$id])) {
-            return $this->definitions[$id];
-        }
-
         if (array_key_exists($id, $this->generated)) {
             return $this->generated[$id];
         }
 
-        $return = $this->definitions[$id]($this);
-
-        if (isset($this->factories[$id])) {
-            return $return;
+        if (!is_callable($this->definitions[$id]) || isset($this->protected[$id])) {
+            return $this->definitions[$id];
         }
 
-        return $this->generated[$id] = $return;
+        if (isset($this->factories[$id])) {
+            return $this->definitions[$id]($this);
+        }
+
+        return $this->generated[$id] = $this->definitions[$id]($this);
     }
 
     public function set(string $id, $value): void {
         $this->definitions[$id] = $value;
-        unset($this->generated[$id]);
+        unset($this->generated[$id], $this->factories[$id], $this->protected[$id]);
     }
 
     public function setProtected(string $id, ?callable $value = null): void {
@@ -52,8 +50,8 @@ class Container implements ArrayAccess, ContainerInterface {
             $value = $this->getDefaultDefinition($id, sprintf('Attempt to set container ID "%s" as protected, but it is not already set nor provided in the function call.', $id));
         }
 
-        $this->protected[$id] = true;
         $this->set($id, $value);
+        $this->protected[$id] = true;
     }
 
     public function setFactory(string $id, ?callable $value = null): void {
@@ -61,8 +59,8 @@ class Container implements ArrayAccess, ContainerInterface {
             $value = $this->getDefaultDefinition($id, sprintf('Attempt to set container ID "%s" as factory, but it is not already set nor provided in the function call', $id));
         }
 
-        $this->factories[$id] = true;
         $this->set($id, $value);
+        $this->factories[$id] = true;
     }
 
     private function getDefaultDefinition(string $id, string $exception_message): callable {
