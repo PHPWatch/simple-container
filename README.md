@@ -1,6 +1,6 @@
 
 # Simple Container  
-A PSR-11 compatible Container that works similar to `pimple/pimple` but lives up to "simple" name.  
+A fast and minimal PSR-11 compatible Dependency Injection Container with array-syntax and without auto-wiring.  
   
  
 [![Latest Stable Version](https://poser.pugx.org/phpwatch/simple-container/v/stable)](https://packagist.org/packages/phpwatch/simple-container) ![CI](https://github.com/PHPWatch/simple-container/workflows/CI/badge.svg?branch=master) [![codecov](https://codecov.io/gh/PHPWatch/simple-container/branch/master/graph/badge.svg)](https://codecov.io/gh/PHPWatch/simple-container) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/PHPWatch/simple-container/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/PHPWatch/simple-container/?branch=master) [![License](https://poser.pugx.org/phpwatch/simple-container/license)](https://packagist.org/packages/phpwatch/simple-container)
@@ -24,12 +24,13 @@ A PSR-11 compatible Container that works similar to `pimple/pimple` but lives up
   
 ```bash  
 composer install phpwatch/simple-container  
-```  
+``` 
+
 ## Usage  
   
-Simple Container supports array-syntax for setting and fetching services and values. You can mark certain services as factory or protected later too.  
+*Simple Container* supports array-syntax for setting and fetching of services and values. You can mark certain services as factory or protected later too.  
   
-### Declare services  
+### Declare services and values
   
 ```php  
 $container = new PHPWatch\SimpleContainer\Container();  
@@ -38,7 +39,8 @@ $container = new PHPWatch\SimpleContainer\Container();
 $container['database.dsn'] = 'mysql:host=localhost;database=test';  
 $container['database'] = static function(Container $container): \PDO {  
  return new PDO($container['database.dsn');  
-}  
+};
+$container['api.ipgeo'] = 'rhkg3...';
 ```  
 
 ### Fetch services  
@@ -46,7 +48,7 @@ $container['database'] = static function(Container $container): \PDO {
 Do not use this class as a service locator. The closures you declare for each service will get the `Container` instance, from which you can fetch services using the array syntax:  
   
 ```php  
-$container['database'];// \PDO  
+$container['database']; // \PDO  
 // OR  
 $container->get('database'); // \PDO  
 ```  
@@ -83,7 +85,7 @@ If the service definition is a closure (similar to the `databse` example above),
 To execute the provided closure every-time a service is requested (for example, to return an HTTP client), you can use *factories*. 
 
 ```php
-$container->setFactory('http.client', static function(ContainerInterface)) {
+$container->setFactory('http.client', static function(ContainerInterface $container)) {
 	$handler = new curl_init();
 	curl_setopt($handler,CURLOPT_USERAGENT, $container->get('http.user-agent'));
 	
@@ -108,7 +110,7 @@ Simple Container expects the service declarations to be closures, and it will ex
 ```php
 $container['csprng'] = static function(): string {
 	return bin2hex(random_bytes(32));
-}
+};
 
 $container['csprng']; // "eaa3e95d4102..."
 $container['csprng']; // "eaa3e95d4102..."
