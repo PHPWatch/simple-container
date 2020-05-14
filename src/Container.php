@@ -44,26 +44,32 @@ class Container implements ArrayAccess, ContainerInterface {
 
     public function set(string $id, $value): void {
         $this->definitions[$id] = $value;
+        unset($this->generated[$id]);
     }
 
     public function setProtected(string $id, ?callable $value = null): void {
-        if ($value === null && !$this->has($id)) {
-            throw new BadMethodCallException(sprintf('Attempt to set container ID "%s" as protected, but it is not already set nor provided in the function call.', $id));
+        if ($value === null) {
+            $value = $this->getDefaultDefinition($id, sprintf('Attempt to set container ID "%s" as protected, but it is not already set nor provided in the function call.', $id));
         }
 
-        $this->definitions[$id] = $value;
-        $this->protected[$id] = $id;
-        unset($this->generated[$id]);
+        $this->protected[$id] = true;
+        $this->set($id, $value);
     }
 
     public function setFactory(string $id, ?callable $value = null): void {
-        if ($value === null && !$this->has($id)) {
-            throw new BadMethodCallException(sprintf('Attempt to set container ID "%s" as factory, but it is not already set nor provided in the function call', $id));
+        if ($value === null) {
+            $value = $this->getDefaultDefinition($id, sprintf('Attempt to set container ID "%s" as factory, but it is not already set nor provided in the function call', $id));
         }
 
-        $this->definitions[$id] = $value;
-        $this->factories[$id] = $id;
-        unset($this->generated[$id]);
+        $this->factories[$id] = true;
+        $this->set($id, $value);
+    }
+
+    private function getDefaultDefinition(string $id, string $exception_message): callable {
+        if (!$this->has($id)) {
+            throw new BadMethodCallException($exception_message);
+        }
+        return $this->definitions[$id];
     }
 
     public function offsetSet($id, $value): void {
