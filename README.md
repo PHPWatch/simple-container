@@ -32,13 +32,15 @@ composer install phpwatch/simple-container
   
 ### Declare services and values
   
-```php  
+```php
+<?php
+use Psr\Container\ContainerInterface;
+
 $container = new PHPWatch\SimpleContainer\Container();  
   
-  
 $container['database.dsn'] = 'mysql:host=localhost;database=test';  
-$container['database'] = static function(Container $container): \PDO {  
- return new PDO($container['database.dsn');  
+$container['database'] = static function(ContainerInterface $container): \PDO {  
+ return new \PDO($container->get('database.dsn'));  
 };
 $container['api.ipgeo'] = 'rhkg3...';
 ```  
@@ -47,7 +49,8 @@ $container['api.ipgeo'] = 'rhkg3...';
   
 Do not use this class as a service locator. The closures you declare for each service will get the `Container` instance, from which you can fetch services using the array syntax:  
   
-```php  
+```php
+<?php  
 $container['database']; // \PDO  
 // OR  
 $container->get('database'); // \PDO  
@@ -56,7 +59,7 @@ $container->get('database'); // \PDO
 ### Create container from definitions  
   
 ```php  
-  
+<?php
 use Psr\Container\ContainerInterface;  
 use PHPWatch\SimpleContainer\Container;  
   
@@ -71,26 +74,25 @@ $services = [
 ]; 
   
 $container = new Container($services);  
-$container->get('csprng'); // Foo8b6f04ae4c9b070cb983fca30c7d3c97
-$container->get('csprng'); // Foo06c30b67cca9ba99348a934b4fc9c963
-$container->get('csprng'); // Foo188f735b64c72b2cfe075c4944b3db94
+$container->get('prefix'); // Foo
 ```  
 
 ### Factory and Protected Services
 
-If the service definition is a closure (similar to the `databse` example above), the return value will be cached, and returned for subsequent calls. This is often the use expected behavior for databases and other reusable services. 
+If the service definition is a closure (similar to the `database` example above), the return value will be cached, and returned for subsequent calls without instantiating again. This is often the use expected behavior for databases and other reusable services. 
 
 #### Factory Services
 
 To execute the provided closure every-time a service is requested (for example, to return an HTTP client), you can use *factories*. 
 
 ```php
-$container->setFactory('http.client', static function(ContainerInterface $container)) {
+<?php
+$container->setFactory('http.client', static function(ContainerInterface $container) {
 	$handler = new curl_init();
 	curl_setopt($handler,CURLOPT_USERAGENT, $container->get('http.user-agent'));
 	
 	return $handler;
-}
+};
 ```
 
 The example above will always return a **new** curl handler resource everytime `$container->get('http.client')` is called, with the User-Agent string set to the `http.user-agent` value from container.
@@ -98,16 +100,18 @@ The example above will always return a **new** curl handler resource everytime `
 You can also mark a container service as a factory method later if it's already set:
 
 ```php
-$container->setFactory('http.client');
+<?php
+$container->setFactory('http.client'); // Mark existing definition as a factory.
 ```
 
-If you have already declared the `http.client` service, it will not be marked as factory. If the existing declaration is not set, or is not a `callable`, a `PHPWatch\SimpleContainer\Exception\BadMethodCallExceptionTest` exception will be thrown.
+If you have already declared the `http.client` service, it will now be marked as factory. If the existing declaration is not set, or is not a `callable`, a `PHPWatch\SimpleContainer\Exception\BadMethodCallExceptionTest` exception will be thrown.
 
 #### Protected Services
 
-Simple Container expects the service declarations to be closures, and it will execute the closure to return the service. However, in some situations, you need to return a closure itself as the service. 
+Simple Container expects the service declarations to be closures, and it will execute the closure by itself to return the service. However, in some situations, you need to return a closure itself as the service. 
 
 ```php
+<?php
 $container['csprng'] = static function(): string {
 	return bin2hex(random_bytes(32));
 };
@@ -117,9 +121,10 @@ $container['csprng']; // "eaa3e95d4102..."
 $container['csprng']; // "eaa3e95d4102..."
 ```
 
-This behavior is probably likely what you wanted. You can mark the service as **factory** to retrieve different values every-time it is called. You can also mark it as **protected**, which will return the **closure itself**, so you can call it on your code:
+This behavior is probably not what you wanted. You can mark the service as **factory** to retrieve different values every-time it is called. You can also mark it as **protected**, which will return the **closure itself**, so you can call it on your code:
 
 ```php
+<?php
 $container->setProtected('csprng', static function(): string {
 	return bin2hex(random_bytes(32));
 });
@@ -137,7 +142,8 @@ echo $csprng(); // a833e3db880...
   
 Just use the array syntax and add/remove services  
   
-```php  
+```php
+<?php
 // Remove:  
 unset($container['secret.service']);  
   
