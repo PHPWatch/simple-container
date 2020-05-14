@@ -69,6 +69,10 @@ class Container implements ArrayAccess, ContainerInterface {
         if (!$this->has($id)) {
             throw new BadMethodCallException($exception_message);
         }
+        if (!is_callable($this->definitions[$id])) {
+            throw new BadMethodCallException(sprintf('Definition for "%s" expected to be a callable, "%s" found', $id, \gettype($this->definitions[$id])));
+        }
+
         return $this->definitions[$id];
     }
 
