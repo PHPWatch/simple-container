@@ -4,6 +4,7 @@ namespace PHPWatch\SimpleContainer\Tests;
 
 use PHPWatch\SimpleContainer\Container;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use function foo\func;
 
 class ContainerServiceCacheTest extends TestCase {
@@ -47,5 +48,18 @@ class ContainerServiceCacheTest extends TestCase {
         $container->set('foo', $static);
         $this->assertSame($static, $container['foo']);
         $this->assertSame($static, $container->get('foo'));
+    }
+
+    public function testCreateFromArray(): void {
+        $services = [
+            'database' => [
+                'dsn' => 'sqlite...'
+            ],
+            'prefix' => 'Foo',
+            'csprng' => fn(ContainerInterface $container) => $container->get('prefix') . bin2hex(random_bytes(16)),
+        ];
+
+        $container = new Container($services);
+        $this->assertStringStartsWith('Foo', $container->get('csprng'));
     }
 }
