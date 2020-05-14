@@ -2,13 +2,18 @@
 A PSR-11 compatible Container that works similar to `pimple/pimple` but lives up to "simple" name.
 
 ## Design goals
- - Less than 100 LOC
- - Avoid auto-wiring by design
+
+ - Do one thing and do it well
+ - ~100 LOC
+ - **No auto-wiring** by design
  - Services are declared as closures
  - Array-syntax to access and set services (`$container['database']`)
  - Fully PSR-11 compliant
  - Support for protected services (return closures verbatim)
  - Support for factory services (return a new instance instead of returning the same instance)
+ - 100% test coverage
+ - Services can over overwritten later, marked factory/protected
+ - Function at full speed without a compilation step
 
 ## Installation
 
@@ -16,6 +21,8 @@ A PSR-11 compatible Container that works similar to `pimple/pimple` but lives up
 composer install phpwatch/simple-container
 ```
 ## Usage
+
+Simple Container supports array-syntax for setting and fetching services and values. You can mark certain services as factory or protected later too.
 
 ### Declare services
 
@@ -40,6 +47,24 @@ $container['database'];// \PDO
 $container->get('database'); // \PDO
 ```
 
+### Create container from definitions
+
+```php
+
+use Psr\Container\ContainerInterface;
+use PHPWatch\SimpleContainer\Container;
+
+$services = [
+    'database' => [
+        'dsn' => 'sqlite...'
+    ],
+    'prefix' => 'Foo',
+    'csprng' => fn(ContainerInterface $container) => $container->get('prefix') . bin2hex(random_bytes(16)),
+];
+
+$container = new Container($services);
+
+```
 ### Extend container
 
 Just use the array syntax and add/remove services
