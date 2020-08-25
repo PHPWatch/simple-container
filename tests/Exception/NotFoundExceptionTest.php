@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPWatch\SimpleContainer\Tests;
+namespace PHPWatch\SimpleContainer\Tests\Exception;
 
 use PHPWatch\SimpleContainer\Container;
 use PHPWatch\SimpleContainer\Exception\NotFoundException;
