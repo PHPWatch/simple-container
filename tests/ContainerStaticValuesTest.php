@@ -5,7 +5,6 @@ namespace PHPWatch\SimpleContainer\Tests;
 use Exception;
 use PHPWatch\SimpleContainer\Container;
 use PHPUnit\Framework\TestCase;
-use PHPWatch\SimpleContainer\Exception\NotFoundException;
 use stdClass;
 
 class ContainerStaticValuesTest extends TestCase {

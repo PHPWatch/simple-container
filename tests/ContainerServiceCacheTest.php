@@ -5,7 +5,6 @@ namespace PHPWatch\SimpleContainer\Tests;
 use PHPWatch\SimpleContainer\Container;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
-use function foo\func;
 
 class ContainerServiceCacheTest extends TestCase {
     public function testStandardServiceResolutionInInit(): void {
