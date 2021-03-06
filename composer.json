@@ -2,7 +2,7 @@
     "name": "phpwatch/simple-container",
     "description": "A fast and minimal PSR-11 compatible Dependency Injection Container with array-syntax and without auto-wiring",
     "type": "library",
-    "keywords": ["psr11", "container", "dependency injection"],
+    "keywords": ["psr11", "container", "dependency injection", "psr-11"],
     "require": {
         "psr/container": "^1.0",
         "php": "^7.4 || ^8.0"
