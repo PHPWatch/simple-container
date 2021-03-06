@@ -4,7 +4,7 @@
     "type": "library",
     "keywords": ["psr11", "container", "dependency injection", "psr-11"],
     "require": {
-        "psr/container": "^2.0",
+        "psr/container": "^1.1 || ^2.0",
         "php": "^7.4 || ^8.0"
     },
     "require-dev": {
@@ -18,7 +18,7 @@
         }
     ],
     "provide": {
-        "psr/container-implementation": "2.0"
+        "psr/container-implementation": "^1.1 || ^2.0"
     },
     "autoload": {
         "psr-4": {
