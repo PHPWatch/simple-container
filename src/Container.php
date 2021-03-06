@@ -95,14 +95,14 @@ class Container implements ArrayAccess, ContainerInterface {
     /**
      * @inheritDoc
      */
-    public function get($id) {
+    public function get(string $id) {
         return $this->getService($id);
     }
 
     /**
      * @inheritDoc
      */
-    public function has($id): bool {
+    public function has(string $id): bool {
         return array_key_exists($id, $this->definitions);
     }
 }
