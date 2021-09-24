@@ -5,7 +5,7 @@
     "keywords": ["psr11", "container", "dependency injection", "psr-11"],
     "require": {
         "psr/container": "^1.0",
-        "php": "^7.4 || ^8.0"
+        "php": "^8.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3"
@@ -14,7 +14,7 @@
     "authors": [
         {
             "name": "Ayesh Karunaratne",
-            "email": "ayesh@ayesh.me"
+            "email": "ayesh@aye.sh"
         }
     ],
     "provide": {
