@@ -88,6 +88,7 @@ class Container implements ArrayAccess, ContainerInterface {
 		return array_key_exists($id, $this->definitions);
 	}
 
+	#[\ReturnTypeWillChange]
 	public function offsetGet(mixed $id): mixed {
 		return $this->getService($id);
 	}
