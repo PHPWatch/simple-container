@@ -23,7 +23,7 @@ A fast and minimal PSR-11 compatible Dependency Injection Container with array-s
 ## Installation  
   
 ```bash  
-composer install phpwatch/simple-container  
+composer require phpwatch/simple-container
 ``` 
 
 ## Usage  
