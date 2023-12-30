@@ -7,6 +7,7 @@ use PHPWatch\SimpleContainer\Exception\BadMethodCallException;
 use PHPWatch\SimpleContainer\Exception\NotFoundException;
 use Psr\Container\ContainerInterface;
 use function array_key_exists;
+use function gettype;
 use function is_callable;
 use function sprintf;
 
@@ -20,7 +21,7 @@ class Container implements ArrayAccess, ContainerInterface {
 		$this->definitions = $definitions;
 	}
 
-	private function getService(string $id) {
+	private function getService(string $id): mixed {
 		if (!$this->has($id)) {
 			throw new NotFoundException(sprintf('Container key "%s" is not defined', $id));
 		}
@@ -40,7 +41,7 @@ class Container implements ArrayAccess, ContainerInterface {
 		return $this->generated[$id] = $this->definitions[$id]($this);
 	}
 
-	public function set(string $id, $value): void {
+	public function set(string $id, mixed $value): void {
 		if (array_key_exists($id, $this->definitions)) {
 			unset($this->generated[$id], $this->factories[$id], $this->protected[$id]);
 		}
@@ -70,32 +71,32 @@ class Container implements ArrayAccess, ContainerInterface {
 			throw new BadMethodCallException($exception_message);
 		}
 		if (!is_callable($this->definitions[$id])) {
-			throw new BadMethodCallException(sprintf('Definition for "%s" expected to be a callable, "%s" found', $id, \gettype($this->definitions[$id])));
+			throw new BadMethodCallException(sprintf('Definition for "%s" expected to be a callable, "%s" found', $id, gettype($this->definitions[$id])));
 		}
 
 		return $this->definitions[$id];
 	}
 
-	public function offsetSet($id, $value): void {
-		$this->set($id, $value);
+	public function offsetSet(mixed $offset, mixed $value): void {
+		$this->set($offset, $value);
 	}
 
-	public function offsetUnset($id): void {
-		unset($this->definitions[$id], $this->generated[$id], $this->factories[$id], $this->protected[$id]);
+	public function offsetUnset(mixed $offset): void {
+		unset($this->definitions[$offset], $this->generated[$offset], $this->factories[$offset], $this->protected[$offset]);
 	}
 
-	public function offsetExists(mixed $id): bool {
-		return array_key_exists($id, $this->definitions);
+	public function offsetExists(mixed $offset): bool {
+		return array_key_exists($offset, $this->definitions);
 	}
 
-	public function offsetGet(mixed $id): mixed {
-		return $this->getService($id);
+	public function offsetGet(mixed $offset): mixed {
+		return $this->getService($offset);
 	}
 
 	/**
 	 * @inheritDoc
 	 */
-	public function get(string $id) {
+	public function get(string $id): mixed {
 		return $this->getService($id);
 	}
 

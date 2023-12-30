@@ -13,7 +13,7 @@ class BadMethodCallExceptionTest extends TestCase {
         $container->setProtected('foo');
     }
 
-    public function testMarkFactorydWithoutClosure(): void {
+    public function testMarkFactoryWithoutClosure(): void {
         $container = new Container();
         $this->expectException(BadMethodCallException::class);
         $container->setFactory('foo');

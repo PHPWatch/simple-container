@@ -5,6 +5,7 @@ namespace PHPWatch\SimpleContainer\Tests;
 use Exception;
 use PHPWatch\SimpleContainer\Container;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use stdClass;
 
 class ContainerStaticValuesTest extends TestCase {
@@ -74,7 +75,7 @@ class ContainerStaticValuesTest extends TestCase {
     public function testIssetDoesNotExecute(): void {
         $container = new Container();
         $container->set('kill', static function() {
-            throw new Exception('Must not execute');
+            throw new RuntimeException('Must not execute');
         });
 
         $this->assertTrue(isset($container['kill']));

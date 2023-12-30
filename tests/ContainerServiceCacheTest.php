@@ -6,6 +6,9 @@ use PHPWatch\SimpleContainer\Container;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
+use const PHP_INT_MAX;
+use const PHP_INT_MIN;
+
 class ContainerServiceCacheTest extends TestCase {
     public function testStandardServiceResolutionInInit(): void {
         $container = new Container(
@@ -23,7 +26,7 @@ class ContainerServiceCacheTest extends TestCase {
 
     public function testStandardServiceResolution(): void {
         $container = new Container();
-        $random = fn() => random_int(\PHP_INT_MIN, \PHP_INT_MAX);
+        $random = fn() => random_int(PHP_INT_MIN, PHP_INT_MAX);
         $container->set('bar', $random);
 
         $value = $container['bar'];
@@ -38,7 +41,7 @@ class ContainerServiceCacheTest extends TestCase {
     }
 
     public function testServiceOverrides(): void {
-        $random = fn() => random_int(43, \PHP_INT_MAX);
+        $random = static fn() => random_int(43, PHP_INT_MAX);
         $static = 42;
 
         $container = new Container(['foo' => $random]);

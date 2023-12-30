@@ -5,9 +5,18 @@ namespace PHPWatch\SimpleContainer\Tests;
 use PHPWatch\SimpleContainer\Container;
 use PHPUnit\Framework\TestCase;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+
+use const PHP_INT_MAX;
+
 class ContainerFactoryTest extends TestCase {
+    /**
+     * @throws NotFoundExceptionInterface
+     * @throws ContainerExceptionInterface
+     */
     public function testFactoryReturnsDifferentValues(): void {
-        $random = fn() => random_int(43, \PHP_INT_MAX);
+        $random = static fn() => random_int(43, PHP_INT_MAX);
         $container = new Container(['foo' => $random]);
 
         $this->assertGreaterThan(42, $container->get('foo'));

@@ -20,7 +20,7 @@ class NotFoundExceptionTest extends TestCase {
 
     public function testClosureNullReturnsDoNotThrow(): void {
         $container = new Container();
-        $container['foo'] = fn(): ?string => null;
+        $container['foo'] = static fn(): ?string => null;
         $this->assertNull($container['foo']);
         $this->assertNull($container['foo']); // Trigger cached result
 
